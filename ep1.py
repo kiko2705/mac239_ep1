@@ -1,2 +1,5 @@
 __author__ = 'kiko'
-print('Hello, world!')exit()
+
+name = input('What is your name?\n')
+print('Hello, world!')
+exit()
