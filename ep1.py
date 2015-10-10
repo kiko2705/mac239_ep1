@@ -1,6 +1,7 @@
-__author__ = 'kiko'
-import math
-from pyeda.inter import *
+from pyeda.boolalg.bdd import bddvar
 
-f = expr("a & b | a & c | b & c")
-f
+a, b = map(bddvar, 'ab')
+assert isinstance(b, object)
+assert isinstance(a, object)
+f = (a & ~b | ~a & b | ~a & ~b | a & b)
+print(f.is_one())
