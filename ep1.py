@@ -31,10 +31,29 @@ for r, c in starts:
 
 DRL = And(*[OneHot0(*[X[r, c] for r, c in diag]) for diag in rldiags])
 
-S = R & C & DLR & DRL
-
+S = DLR
 print(S.is_cnf())
 print(len(S.xs))
+
+S = DRL
+print(S.is_cnf())
+print(len(S.xs))
+
+S = R
+print(S.is_cnf())
+print(len(S.xs))
+
+S = C
+print(S.is_cnf())
+print(len(S.xs))
+
+S = R & C
+print(S.is_cnf())
+print(len(S.xs))
+
+
+
+
 
 
 
