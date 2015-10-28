@@ -4,24 +4,21 @@ __author__ = 'kiko'
 N = int(input('Entre com o tamanho do tabuleiro : '))
 tamanho_lista_clausulas = N*N
 
-# cláusulas para a presença de uma rainha em cada linha
-# r11 ∨ r12 (C1)
-# r21 ∨ r22 (C2)
-# etc...
+# cláusulas de restrição a não ataques nas diagonais
+# ¬r 11 ∨ ¬r 22
+# ¬r 12 ∨ ¬r 21
+
 # índice linha matriz tabuleiro
 num_linhas = N
 # índice coluna matriz tabuleiro
 num_colunas = N
+
 # define matriz cláusula ( C1, C2, etc... )
-#c = []
-#c.append(0)
 c = [0 for x in range(N*N)]
 # define matriz temp cláusula ( C1, C2, etc... )
 c_temp = [0 for x in range(N*N)]
-#c_temp.append(0)
-indice_clausula = 0
 
-valor  = 0
+indice_clausula = 0
 linha  = 0
 coluna = 0
 
@@ -39,10 +36,6 @@ for linha in range(N):
         print('C', indice_clausula+1, '=', c[indice_clausula])
     indice_clausula = indice_clausula + 1
 
-# print('r', linha+1, coluna+1, '=', r[linha][coluna])
 # define dicionario que conterá cláusulas presenca rainhas
 # do tipo dic = { "r11 V r12": C1, "r21 V r22": C2}
 dicionario_clausulas_presenca = {}
-
-#----------------------------------------------------------------------------------------------------------------------
-
