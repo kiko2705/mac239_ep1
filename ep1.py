@@ -47,9 +47,24 @@ S = C
 print(S.is_cnf())
 print(len(S.xs))
 
-S = R & C
+S = DLR & DRL
 print(S.is_cnf())
 print(len(S.xs))
+
+
+def display(point):
+    chars = list()
+    for r in range(8):
+        for c in range(8):
+            if point[X[[r, c]]]:
+                chars.append("Q")
+            else:
+                chars.append(".")
+        if r != 7:
+            chars.append("\n")
+    print("".join(chars))
+
+
 
 
 
