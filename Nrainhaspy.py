@@ -4,17 +4,10 @@ __author__ = 'kiko & vitor'
 N = int(input('Entre com o tamanho do tabuleiro : '))
 K = int(input('Entre com o número de rainhas já colocadas : '))
 
-# índice linha matriz tabuleiro
-linha = N
-# índice coluna matriz tabuleiro
-coluna = N
-
 tamanho_lista_clausulas = N*N
 
 # define a matriz bidimensional que representa o tabuleiro
 matriz_tabuleiro = [[0 for x in range(N)] for x in range(N)]
-# define a matriz de rainhas bidimensional, que representa cada rainha
-r = [[0 for x in range(N)] for x in range(N)]
 
 # gera clausula presença
 #lista_clausulas_presenca = []
@@ -35,6 +28,14 @@ def gera_clausula_presenca_rainha(N):
     # r21 ∨ r22 (c2)
     # etc...
 
+    # índice linha matriz tabuleiro
+    linha = N
+    # índice coluna matriz tabuleiro
+    coluna = N
+
+    # define a matriz de rainhas bidimensional, que representa cada rainha
+    r = [[0 for x in range(N)] for x in range(N)]
+
     # define lista que conterá cláusulas presenca rainhas
     lista_clausulas = []
 
@@ -53,7 +54,40 @@ def gera_clausula_presenca_rainha(N):
 
     #return lista_clausulas
 #----------------------------------------------------------------------------------------------------------------------
+# função restrição linhas
+def gera_clausula_restricao_linha(N):
 
+    # cláusulas de restrição de não ataque nas linhas:
+    # ¬r 11 ∨ ¬r 12
+    # ¬r 21 ∨ ¬r 22
+    # etc...
+
+    # índice linha matriz tabuleiro
+    linha = N
+    # índice coluna matriz tabuleiro
+    coluna = N
+
+    # define a matriz de rainhas bidimensional, que representa cada rainha
+    r = [[0 for x in range(N)] for x in range(N)]
+
+    # define lista que conterá cláusulas restrição linhas
+    lista_clausulas = []
+
+    # loop para preencher cláusulas restrição linhas
+    # número de cláusulas a serem criadas será NxN
+    for linha in range(N):
+        for coluna in range(N):
+            r[linha][coluna] = False
+            print('r', linha+1, coluna+1, '=', r[linha][coluna])
+            # coloca o valor boleano em cada coluna na lista cláusulas
+            lista_clausulas.append(r[linha][coluna])
+    # coloca o valor boleano em cada linha na lista cláusulas
+    r[linha][coluna] = False
+    print('r', linha+1, coluna+1, '=', r[linha][coluna])
+    lista_clausulas.append(r[linha][coluna])
+
+    #return lista_clausulas
+#----------------------------------------------------------------------------------------------------------------------
 
 
 
