@@ -36,16 +36,18 @@ nome_casa_2 = "r"
 
 # define string CNF
 cnf = ""
+# define string CNF1 temporária
+cnf1 = ""
+# define string CNF2 temporária
+cnf2 = ""
 
 # número de cláusulas a serem criadas será NxN
 for linha in range(N):
-    contador_numero_casas = contador_numero_casas + 1
     for coluna in range(N):
-        contador_numero_casas = contador_numero_casas + 1
         if coluna == 0:
             cnf = cnf + "("
         nome_casa = "~r" + str(linha+1) + str(coluna+1)
-        cnf = cnf + nome_casa
+        cnf1 = cnf1 + nome_casa
         if coluna != (N-1):
             cnf = cnf + "|"
     cnf = cnf + ")"

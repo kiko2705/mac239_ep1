@@ -36,9 +36,7 @@ cnf = ""
 
 # número de cláusulas a serem criadas será NxN
 for linha in range(N):
-    contador_numero_casas = contador_numero_casas + 1
     for coluna in range(N):
-        contador_numero_casas = contador_numero_casas + 1
         if coluna == 0:
             cnf = cnf + "("
         nome_casa = "~r" + str(linha+1) + str(coluna+1)
