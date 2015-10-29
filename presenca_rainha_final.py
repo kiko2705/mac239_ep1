@@ -1,5 +1,19 @@
 __author__ = 'kiko'
 
+from pyeda.inter import *
+from subprocess import call
+import os
+
+#-------------------------------------------------------------------------------------------------------------------
+def Export2Image(bdd, fmt, file_name):
+    # Exporta o diagrama para o Graphviz (linguagem Dot)
+    with open("temp.gv", "w") as hFile:
+        hFile.write(bdd.to_dot())
+    # Gera o PDF com o diagrama
+    call(["dot", "-T" + fmt, "temp.gv", "-o" + file_name])
+    os.remove("temp.gv")
+#--------------------------------------------------------------------------------------------------------------------
+
 # INSERE DADO INICIAL
 N = int(input('Entre com o tamanho do tabuleiro : '))
 
@@ -18,6 +32,7 @@ nome_casa = "r"
 
 # define string CNF
 cnf = ""
+cnf_final = ""
 
 # número de cláusulas a serem criadas será NxN
 for linha in range(N):
@@ -29,12 +44,22 @@ for linha in range(N):
         nome_casa = "r" + str(linha+1) + str(coluna+1)
         cnf = cnf + nome_casa
         if coluna != (N-1):
-            cnf = cnf + " | "
+            cnf = cnf + "|"
     cnf = cnf + ")"
-    cnf = cnf + " & "
+    cnf = cnf + "&"
+
+if cnf.endswith('&'):
+    cnf = cnf[:-1]
+
 print(cnf)
 
+# associa a f a expressão cnf
+f = expr(cnf)
+print(f)
+# converte em bdd a cnf
+bdd = expr2bdd(f)
+print(bdd)
 
-
+Export2Image(bdd, "pdf", "bdd1.pdf")
 
 
