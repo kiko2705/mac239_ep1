@@ -49,15 +49,9 @@ for linha in range(N):
 if cnf.endswith('&'):
     cnf = cnf[:-1]
 
-print(cnf)
-
-# associa a f a expressão cnf
-f = expr(cnf)
-print(f)
 # converte em bdd a cnf
-bdd = expr2bdd(f)
-print(bdd)
+#bdd = expr2bdd(f)
 
-Export2Image(bdd, "pdf", "bdd1.pdf")
+#Export2Image(bdd, "pdf", "bdd1.pdf")
 
 

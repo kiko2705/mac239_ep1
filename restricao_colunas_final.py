@@ -13,15 +13,10 @@ def Export2Image(bdd, fmt, file_name):
     call(["dot", "-T" + fmt, "temp.gv", "-o" + file_name])
     os.remove("temp.gv")
 #--------------------------------------------------------------------------------------------------------------------
-
-
-# INSERE DADO INICIAL
-N = int(input('Entre com o tamanho do tabuleiro : '))
-
 # cláusulas de restrição de não ataque nas colunas:
-#¬r 11 ∨ ¬r 21
-#¬r 12 ∨ ¬r 22
-# etc...
+    #¬r 11 ∨ ¬r 21
+    #¬r 12 ∨ ¬r 22
+    # etc...
 
 linha  = 0
 coluna = 0
@@ -46,7 +41,7 @@ for linha in range(N):
     for coluna in range(N):
         if coluna == 0:
             cnf = cnf + "("
-        nome_casa = "~r" + str(linha+1) + str(coluna+1)
+        nome_casa = "~r" + str(coluna+1) + str(linha+1)
         cnf1 = cnf1 + nome_casa
         if coluna != (N-1):
             cnf = cnf + "|"
