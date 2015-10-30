@@ -260,6 +260,9 @@ if __name__ == "__main__":
     cnf_restricao_colunas = restricao_colunas(N)
     print(cnf_restricao_colunas)
 
+    cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas
+    print(cnf_n_rainhas)
+
 
 
 
