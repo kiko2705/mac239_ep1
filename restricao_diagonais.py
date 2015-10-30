@@ -34,25 +34,23 @@ r = exprvars('r', N, N)
 disjuncao = 0
 
 # cria cnf conjunção de disjunções
-cnf_presenca_rainha = 0
+cnf_restricao_diagonais_rainha = 0
 
 # define a lista de cláusulas de disjunções
 c = [0 for x in range(N)]
 
-# define a lista de conjunção de disjunções
-#cnf_presenca_rainha = [0 for x in range(N)]
-
 # contador do número cláusulas
 cont_clausulas = 0
 
-# loop para preencher cláusulas presença rainha
+# loop para preencher cláusulas restrição diagonais rainha
 # número de cláusulas a serem criadas será NxN
 for linha in range(N):
     for coluna in range(N):
-        if (coluna == 0):
+        if( (coluna == linha) and coluna == 0 ):
             disjuncao = r[linha][coluna]
         else:
-            disjuncao = disjuncao | r[linha][coluna]
+            if (coluna == linha):
+                disjuncao = disjuncao | r[linha][coluna]
     # fim disjunções da cláusula n
     c[cont_clausulas] = disjuncao
     cont_clausulas += 1
@@ -62,11 +60,11 @@ for linha in range(N):
 
 # gera lista conjunção de disjunções
 # varre lista
-for contador_cnf_presenca_rainha in range(N):
-    if contador_cnf_presenca_rainha == 0:
-        cnf_presenca_rainha = c[contador_cnf_presenca_rainha]
+for contador_cnf_restricao_diagonais_rainha in range(N):
+    if contador_cnf_restricao_diagonais_rainha == 0:
+        cnf_restricao_diagonais_rainha = c[contador_cnf_restricao_diagonais_rainha]
     else:
-        cnf_presenca_rainha = cnf_presenca_rainha & c[contador_cnf_presenca_rainha]
-# no final deste laço cnf_presenca_rainha conterá a cnf de presença
+        cnf_restricao_diagonais_rainha = cnf_restricao_diagonais_rainha & c[contador_cnf_restricao_diagonais_rainha]
+# no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restrição das diagonais
 
-print(cnf_presenca_rainha)
+print(cnf_restricao_diagonais_rainha)

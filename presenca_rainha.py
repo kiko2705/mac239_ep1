@@ -13,7 +13,7 @@ def Export2Image(bdd, fmt, file_name):
     call(["dot", "-T" + fmt, "temp.gv", "-o" + file_name])
     os.remove("temp.gv")
 #--------------------------------------------------------------------------------------------------------------------
-# cláusulas para a presença de uma rainha em cada linha
+# cláusulas para a presença de uma rainha por linha
     # r11 ∨ r12
     # r21 ∨ r22
     # etc...
@@ -37,9 +37,6 @@ cnf_presenca_rainha = 0
 
 # define a lista de cláusulas de disjunções
 c = [0 for x in range(N)]
-
-# define a lista de conjunção de disjunções
-#cnf_presenca_rainha = [0 for x in range(N)]
 
 # contador do número cláusulas
 cont_clausulas = 0
@@ -73,7 +70,7 @@ print(cnf_presenca_rainha)
 # converte em bdd a cnf
 bdd = expr2bdd(cnf_presenca_rainha)
 
-Export2Image(bdd, "pdf", "bdd_presenca.pdf")
+#Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
 
 
