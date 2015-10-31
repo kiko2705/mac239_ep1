@@ -46,9 +46,10 @@ cont_clausulas = 0
 for linha in range(N):
     for coluna in range(N):
         if (coluna == 0):
-            disjuncao = (r[linha][coluna])
+            disjuncao = ~r[linha][coluna]
         else:
-            disjuncao =  disjuncao | r[linha][coluna]
+            negacao = ~r[linha][coluna]
+            disjuncao =  disjuncao | negacao
     # fim disjunções da cláusula n
     c[cont_clausulas] = disjuncao
     cont_clausulas += 1

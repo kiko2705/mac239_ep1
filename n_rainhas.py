@@ -68,7 +68,7 @@ def presenca_rainha(N):
 
     #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
-    return(cnf_presenca_rainha)
+    return(bdd)
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_linhas(N):
     # cláusulas para a restrição de linhas
@@ -101,9 +101,10 @@ def restricao_linhas(N):
     for linha in range(N):
         for coluna in range(N):
             if (coluna == 0):
-                disjuncao = (r[linha][coluna])
+                disjuncao = ~r[linha][coluna]
             else:
-                disjuncao =  disjuncao | r[linha][coluna]
+                negacao = ~r[linha][coluna]
+                disjuncao = disjuncao | negacao
         # fim disjunções da cláusula n
         c[cont_clausulas] = disjuncao
         cont_clausulas += 1
@@ -125,7 +126,7 @@ def restricao_linhas(N):
 
     #Export2Image(bdd, "pdf", "bdd_restricao_linhas.pdf")
 
-    return(cnf_restricao_linhas_rainha)
+    return(bdd)
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_colunas(N):
 
@@ -159,9 +160,10 @@ def restricao_colunas(N):
     for linha in range(N):
         for coluna in range(N):
             if (coluna == 0):
-                disjuncao = r[coluna][linha]
+                disjuncao = ~r[coluna][linha]
             else:
-                disjuncao = disjuncao | r[coluna][linha]
+                negacao = ~r[coluna][linha]
+                disjuncao = disjuncao | negacao
         # fim disjunções da cláusula n
         c[cont_clausulas] = disjuncao
         cont_clausulas += 1
@@ -183,7 +185,7 @@ def restricao_colunas(N):
 
     #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
 
-    return(cnf_restricao_colunas_rainha)
+    return(bdd)
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_diagonais(N):
 
@@ -243,7 +245,7 @@ def restricao_diagonais(N):
     #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
 
 
-    return cnf_restricao_diagonais_rainha
+    return (bdd)
 #--------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
@@ -252,16 +254,16 @@ if __name__ == "__main__":
 
     # une as restrições
     cnf_presenca_rainha = presenca_rainha(N)
-    print(cnf_presenca_rainha)
 
     cnf_restricao_linhas = restricao_linhas(N)
-    print(cnf_restricao_linhas)
 
     cnf_restricao_colunas = restricao_colunas(N)
-    print(cnf_restricao_colunas)
 
     cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas
-    print(cnf_n_rainhas)
+
+    bdd_expr_cnf_n_rainhas = expr2bdd(cnf_n_rainhas)
+    print(bdd_expr_cnf_n_rainhas.satisfy_one())
+    print(bdd_expr_cnf_n_rainhas.satisfy_count())
 
 
 
