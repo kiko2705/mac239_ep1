@@ -1,9 +1,13 @@
-__author__ = 'kiko'
+__author__ = 'Francisco Santos Nusp 794650,  Vitor Kemada Nusp'
 
 from pyeda.inter import *
 from subprocess import call
 import os
-
+#-------------------------------------------------------------------------------------------------------------------
+def for_estilo_java(valor_inicial,condicao,incremento):
+    while condicao(valor_inicial):
+        yield valor_inicial
+        valor_inicial = incremento(valor_inicial)
 #-------------------------------------------------------------------------------------------------------------------
 def Export2Image(bdd, fmt, file_name):
     # Exporta o diagrama para o Graphviz (linguagem Dot)
@@ -216,16 +220,15 @@ def restricao_diagonais(N):
 
     # loop para preencher cláusulas restrição diagonais rainha
     # número de cláusulas a serem criadas será NxN
-    for linha in range(N):
-        for coluna in range(N):
-            if( (coluna == linha) and coluna == 0 ):
-                disjuncao = r[linha][coluna]
-            else:
-                if (coluna == linha):
-                    disjuncao = disjuncao | r[linha][coluna]
-        # fim disjunções da cláusula n
-        c[cont_clausulas] = disjuncao
-        cont_clausulas += 1
+    for linha in for_estilo_java(0, lambda linha:linha < N, lambda linha:linha+1):
+        print("Diagonal")
+        for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
+            print("([", coluna, ",", (coluna + linha),  "])")
+        if linha != 0:
+            print("Diagonal")
+            for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
+                print("([", (coluna + linha), ",", coluna, "])")
+
     # no final deste laço c[] conterá o conjunto de cláusulas de disjunções
 
     # agora juntaremos cada c[] com um & para construir a CNF
@@ -262,8 +265,10 @@ if __name__ == "__main__":
     cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas
 
     bdd_expr_cnf_n_rainhas = expr2bdd(cnf_n_rainhas)
-    print(bdd_expr_cnf_n_rainhas.satisfy_one())
     print(bdd_expr_cnf_n_rainhas.satisfy_count())
+    print(list(bdd_expr_cnf_n_rainhas.satisfy_all()))
+
+
 
 
 
