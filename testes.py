@@ -23,7 +23,7 @@ if __name__ == "__main__":
     flag_clausulas = 0
 
     r = exprvars('r', N, N)
-
+#-------------------------------------------------------------------------------------
     # diagonais principais
 
     for linha in for_estilo_java(0, lambda linha:linha < N, lambda linha:linha+1):
@@ -34,23 +34,34 @@ if __name__ == "__main__":
             else:
                 negacao = ~r[coluna][coluna+linha]
                 disjuncao = disjuncao | negacao
-        c[cont_clausulas] = disjuncao
+        # se não é a primeira disjunção
+        if(cont_clausulas == 0):
+            c[cont_clausulas] = disjuncao
+            #print(c[cont_clausulas])
+        else:
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+            #print(c[cont_clausulas])
+
         cont_clausulas += 1
         flag_clausulas = 0
         if linha != 0:
+            #print("passou")
             for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
-                #print("([", (coluna + linha), ",", coluna, "])")
-                #print("p2")
                 if flag_clausulas == 0:
                     disjuncao = ~r[coluna+linha][coluna]
+                    #print(~r[coluna+linha][coluna])
                     flag_clausulas = 1
                 else:
                     negacao = ~r[coluna+linha][coluna]
+                    #print("p4")
+                    #print(~r[coluna+linha][coluna])
                     disjuncao = disjuncao | negacao
-            c[cont_clausulas] = disjuncao
-            cont_clausulas += 1
+            #print("calculou cp")
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
             flag_clausulas = 0
-
+            cont_clausulas += 1
+#--------------------------------------------------------------------------------------------------
+    # diagonais superiores secundárias
 
     cont_clausulas = 0
     flag_clausulas = 0
@@ -58,7 +69,6 @@ if __name__ == "__main__":
     #contador diagonais superiores secundarias
     cont_ds = 0
 
-    # diagonais superiores secundárias
     for cont_ds in range(0, N-1):
         for coluna, linha in zip(reversed(range(N-cont_ds)), range(0, linha+1)):
             if flag_clausulas == 0:
@@ -67,9 +77,21 @@ if __name__ == "__main__":
             else:
                 negacao = ~r[linha][coluna]
                 disjuncao = disjuncao | negacao
-        c[cont_clausulas] = disjuncao
-        cont_clausulas += 1
+        print("calculou c")
+        #c[cont_clausulas] = disjuncao
+        #cont_clausulas += 1
+        if(cont_clausulas == 0):
+            print("p")
+            c[cont_clausulas] = disjuncao
+            print(c[cont_clausulas])
+        else:
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+            print(c[cont_clausulas])
+        flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
 
+
+#-----------------------------------------------------------------------------------------
     # diagonais inferiores secundárias
 
     #contador diagonais inferiores secundarias
@@ -80,22 +102,26 @@ if __name__ == "__main__":
     inicio = 0
 
     for cont_di in range(0, N-1):
-        print(cont_di)
         for coluna, linha in zip(reversed(range(N_col)), range(inicio, N_lin)):
             if flag_clausulas == 0:
                 disjuncao = ~r[linha][coluna]
                 flag_clausulas = 1
-                print(~r[linha][coluna])
+                #print(~r[linha][coluna])
             else:
                 negacao = ~r[linha][coluna]
                 disjuncao = disjuncao | negacao
-                print(~r[linha][coluna])
-
-        inicio = inicio + 1
-        c[cont_clausulas] = disjuncao
+                #print(~r[linha][coluna])
         cont_clausulas += 1
-
-
+        inicio = inicio + 1
+        # se não é a primeira disjunção
+        if(cont_clausulas != 1):
+            c[cont_clausulas] = c[cont_clausulas] & disjuncao
+            #print(c[cont_clausulas])
+        else:
+            c[cont_clausulas] = disjuncao
+            #print(c[cont_clausulas])
+        cont_clausulas += 1
+#---------------------------------------------------------------------------------------
     # gera lista conjunção de disjunções
     # varre lista
     for contador_cnf_restricao_diagonais_rainha in range(N):
