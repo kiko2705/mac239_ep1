@@ -198,40 +198,46 @@ def restricao_diagonais(N):
     # ¬r 12 ∨ ¬r 21
     # etc...
 
-    # índice linha matriz tabuleiro
-    linha = N
-    # índice coluna matriz tabuleiro
-    coluna = N
-
-    # define matriz r
-    r = exprvars('r', N, N)
-
-    # cria disjunções
+    N = 4
+    linha  = 0
+    coluna = 0
     disjuncao = 0
 
-    # cria cnf conjunção de disjunções
-    cnf_restricao_diagonais_rainha = 0
-
     # define a lista de cláusulas de disjunções
-    c = [0 for x in range(N)]
+    c = [0 for x in range(N*N)]
 
     # contador do número cláusulas
     cont_clausulas = 0
 
-    # loop para preencher cláusulas restrição diagonais rainha
-    # número de cláusulas a serem criadas será NxN
+    flag_clausulas = 0
+
+    r = exprvars('r', N, N)
+
     for linha in for_estilo_java(0, lambda linha:linha < N, lambda linha:linha+1):
-        print("Diagonal")
         for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
-            print("([", coluna, ",", (coluna + linha),  "])")
+            if flag_clausulas == 0:
+                disjuncao = ~r[coluna][coluna+linha]
+                flag_clausulas = 1
+            else:
+                negacao = ~r[coluna][coluna+linha]
+                disjuncao = disjuncao | negacao
+        c[cont_clausulas] = disjuncao
+        cont_clausulas += 1
+        flag_clausulas = 0
         if linha != 0:
-            print("Diagonal")
             for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
-                print("([", (coluna + linha), ",", coluna, "])")
+                #print("([", (coluna + linha), ",", coluna, "])")
+                #print("p2")
+                if flag_clausulas == 0:
+                    disjuncao = ~r[coluna+linha][coluna]
+                    flag_clausulas = 1
+                else:
+                    negacao = ~r[coluna+linha][coluna]
+                    disjuncao = disjuncao | negacao
+            c[cont_clausulas] = disjuncao
+            cont_clausulas += 1
+            flag_clausulas = 0
 
-    # no final deste laço c[] conterá o conjunto de cláusulas de disjunções
-
-    # agora juntaremos cada c[] com um & para construir a CNF
 
     # gera lista conjunção de disjunções
     # varre lista
@@ -240,8 +246,7 @@ def restricao_diagonais(N):
             cnf_restricao_diagonais_rainha = c[contador_cnf_restricao_diagonais_rainha]
         else:
             cnf_restricao_diagonais_rainha = cnf_restricao_diagonais_rainha & c[contador_cnf_restricao_diagonais_rainha]
-    # no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restrição das diagonais
-
+    # no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restricao diagonais
     # converte em bdd a cnf
     bdd = expr2bdd(cnf_restricao_diagonais_rainha)
 
