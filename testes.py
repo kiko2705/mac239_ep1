@@ -77,25 +77,17 @@ if __name__ == "__main__":
             else:
                 negacao = ~r[linha][coluna]
                 disjuncao = disjuncao | negacao
-        print("calculou c")
-        #c[cont_clausulas] = disjuncao
-        #cont_clausulas += 1
         if(cont_clausulas == 0):
-            print("p")
             c[cont_clausulas] = disjuncao
-            print(c[cont_clausulas])
         else:
             c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
-            print(c[cont_clausulas])
         flag_clausulas = 0
         cont_clausulas = cont_clausulas + 1
-
-
 #-----------------------------------------------------------------------------------------
     # diagonais inferiores secundárias
 
     #contador diagonais inferiores secundarias
-    cont_di = N-1
+    cont_clausulas = 0
     flag_clausulas = 0
     N_col = N
     N_lin = N
@@ -106,21 +98,16 @@ if __name__ == "__main__":
             if flag_clausulas == 0:
                 disjuncao = ~r[linha][coluna]
                 flag_clausulas = 1
-                #print(~r[linha][coluna])
             else:
                 negacao = ~r[linha][coluna]
                 disjuncao = disjuncao | negacao
-                #print(~r[linha][coluna])
-        cont_clausulas += 1
         inicio = inicio + 1
-        # se não é a primeira disjunção
-        if(cont_clausulas != 1):
-            c[cont_clausulas] = c[cont_clausulas] & disjuncao
-            #print(c[cont_clausulas])
-        else:
+        if(cont_clausulas == 0):
             c[cont_clausulas] = disjuncao
-            #print(c[cont_clausulas])
-        cont_clausulas += 1
+        else:
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+        flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
 #---------------------------------------------------------------------------------------
     # gera lista conjunção de disjunções
     # varre lista
