@@ -2,7 +2,7 @@ __author__ = 'kiko'
 
 from pyeda.inter import *
 
-def presenca_rainha(N, c):
+def presenca_rainha(N, cnf_presenca_rainha):
     # cláusulas para a presença de uma rainha em cada linha
         # r11 ∨ r12
         # r21 ∨ r22
@@ -18,7 +18,7 @@ def presenca_rainha(N, c):
     #cnf_presenca_rainha = 0
 
     # define a lista de cláusulas de disjunções
-    #c = [0 for x in range(N*N)]
+    c = [0 for x in range(N*N*N)]
 
     # contador do número cláusulas
     cont_clausulas = 0
@@ -39,14 +39,11 @@ def presenca_rainha(N, c):
     # agora juntaremos cada c[] com um & para construir a CNF
     # gera lista conjunção de disjunções
     for contador_cnf_presenca_rainha in range(N):
-        if contador_cnf_presenca_rainha == 0:
-            cnf_presenca_rainha = c[contador_cnf_presenca_rainha]
-        else:
-            cnf_presenca_rainha = cnf_presenca_rainha & c[contador_cnf_presenca_rainha]
-    # no final deste laço cnf_presenca_rainha conterá a cnf de presença
+            cnf_presenca_rainha[contador_cnf_presenca_rainha] = c[contador_cnf_presenca_rainha]
 
     #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
     return cnf_presenca_rainha
 #--------------------------------------------------------------------------------------------------------------------
+
 

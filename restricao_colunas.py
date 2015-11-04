@@ -2,7 +2,7 @@ __author__ = 'kiko'
 
 from pyeda.inter import *
 
-def restricao_colunas(N):
+def restricao_colunas(N, c):
 
      # cláusulas de restrição de não ataque nas colunas:
         #¬r 11 ∨ ¬r 21
@@ -26,9 +26,6 @@ def restricao_colunas(N):
     # define a lista de duplas de disjunções
     c_temp = [0 for x in range(N*N*N)]
 
-    # define a lista de cláusulas de disjunções
-    c = [0 for x in range(N*N*N)]
-
     contador_c = 0
 
     contador_dupla = 0
@@ -41,20 +38,10 @@ def restricao_colunas(N):
             for aux in range(linha+1, N):
                 disjuncao_temp = ~r[linha][coluna] | ~r[aux][coluna]
                 c_temp[contador_dupla] = disjuncao_temp
-                if contador_dupla == 0:
-                    c[contador_c] = c_temp[contador_dupla]
-                    print(c[contador_c])
-                else:
-                    contador_c += 1
-                    c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                    print(c[contador_c])
+                c[contador_c] = c_temp[contador_dupla]
+                contador_c += 1
                 contador_dupla += 1
 
-    # converte em bdd a cnf
-    #bdd = expr2bdd(cnf_restricao_colunas_rainha)
-
-    #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
-
-    #return cnf_restricao_colunas_rainha
+    return c
 #--------------------------------------------------------------------------------------------------------------------
 

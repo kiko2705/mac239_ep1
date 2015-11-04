@@ -2,7 +2,8 @@ __author__ = 'kiko'
 
 from pyeda.inter import *
 
-def restricao_diagonais(N):
+
+def restricao_diagonais(N, c):
 
     # cláusulas de restrição a não ataques nas diagonais
     # ¬r 11 ∨ ¬r 22
@@ -15,7 +16,7 @@ def restricao_diagonais(N):
     # define a lista de cláusulas de disjunções temporaria
     c_temp = [0 for x in range(N*N*N)]
     # define a lista de cláusulas de disjunções
-    c = [0 for x in range(N*N*N)]
+    #c = [0 for x in range(N*N*N)]
     # contador do número cláusulas
     r = exprvars('r', N, N)
      # define a lista de cnfs de diagonais
@@ -34,13 +35,8 @@ def restricao_diagonais(N):
             for aux_c, aux_l in zip(range(coluna+1,N), range(linha+1,N)):
                 disjuncao_temp = ~r[linha][coluna] | ~r[aux_l][aux_c]
                 c_temp[contador_dupla] = disjuncao_temp
-                if contador_dupla == 0:
-                    c[contador_c] = c_temp[contador_dupla]
-                    print(c[contador_c])
-                else:
-                    contador_c += 1
-                    c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                    print(c[contador_c])
+                c[contador_c] = c_temp[contador_dupla]
+                contador_c += 1
                 contador_dupla += 1
 
     # diagonal principal inferiores
@@ -49,9 +45,8 @@ def restricao_diagonais(N):
             for aux_c, aux_l in zip(range(coluna+1,N), range(linha+1,N)):
                 disjuncao_temp = ~r[linha][coluna] | ~r[aux_l][aux_c]
                 c_temp[contador_dupla] = disjuncao_temp
+                c[contador_c] = c_temp[contador_dupla]
                 contador_c += 1
-                c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                print(c[contador_c])
                 contador_dupla += 1
 
     # diagonais superiores secundárias
@@ -60,9 +55,8 @@ def restricao_diagonais(N):
             for aux_c, aux_l in zip(reversed(range(0, coluna)), range(linha+1, N)):
                 disjuncao_temp = ~r[linha][coluna] | ~r[aux_l][aux_c]
                 c_temp[contador_dupla] = disjuncao_temp
+                c[contador_c] = c_temp[contador_dupla]
                 contador_c += 1
-                c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                print(c[contador_c])
                 contador_dupla += 1
 
     # diagonais inferiores secundárias
@@ -71,10 +65,10 @@ def restricao_diagonais(N):
             for aux_c, aux_l in zip(reversed(range(0, coluna)), range(linha+1, N)):
                 disjuncao_temp = ~r[linha][coluna] | ~r[aux_l][aux_c]
                 c_temp[contador_dupla] = disjuncao_temp
+                c[contador_c] = c_temp[contador_dupla]
                 contador_c += 1
-                c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                print(c[contador_c])
                 contador_dupla += 1
 
+    return c
 #--------------------------------------------------------------------------------------------------------------------
 

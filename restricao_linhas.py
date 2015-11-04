@@ -37,15 +37,10 @@ def restricao_linhas(N, c):
             for aux in range(coluna+1, N):
                 disjuncao_temp = ~r[linha][coluna] | ~r[linha][aux]
                 c_temp[contador_dupla] = disjuncao_temp
-                if contador_dupla == 0:
-                    c[contador_c] = c_temp[contador_dupla]
-                    print(c[contador_c])
-                else:
-                    contador_c += 1
-                    c[contador_c] = c[contador_c-1] & c_temp[contador_dupla]
-                    print(c[contador_c])
+                c[contador_c] = c_temp[contador_dupla]
+                contador_c += 1
                 contador_dupla += 1
 
-    #return
+    return c
 #--------------------------------------------------------------------------------------------------------------------
 
