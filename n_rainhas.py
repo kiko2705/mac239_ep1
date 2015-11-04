@@ -23,7 +23,6 @@ def presenca_rainha(N):
         # r21 ∨ r22
         # etc...
 
-    # índice linha matriz tabuleiro
     linha = N
     # índice coluna matriz tabuleiro
     coluna = N
