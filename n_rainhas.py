@@ -68,11 +68,11 @@ def presenca_rainha(N):
     # no final deste laço cnf_presenca_rainha conterá a cnf de presença
 
     # converte em bdd a cnf
-    bdd = expr2bdd(cnf_presenca_rainha)
+    #bdd = expr2bdd(cnf_presenca_rainha)
 
     #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
-    return(bdd)
+    return cnf_presenca_rainha
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_linhas(N):
     # cláusulas para a restrição de linhas
@@ -126,11 +126,11 @@ def restricao_linhas(N):
     # no final deste laço cnf_restricao_linhas_rainha conterá a cnf de restrição linhas
 
     # converte em bdd a cnf
-    bdd = expr2bdd(cnf_restricao_linhas_rainha)
+    #bdd = expr2bdd(cnf_restricao_linhas_rainha)
 
     #Export2Image(bdd, "pdf", "bdd_restricao_linhas.pdf")
 
-    return(bdd)
+    return cnf_restricao_linhas_rainha
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_colunas(N):
 
@@ -185,11 +185,11 @@ def restricao_colunas(N):
     # no final deste laço cnf_restricao_colunas_rainha conterá a cnf de restrição colunas
 
     # converte em bdd a cnf
-    bdd = expr2bdd(cnf_restricao_colunas_rainha)
+    #bdd = expr2bdd(cnf_restricao_colunas_rainha)
 
     #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
 
-    return(bdd)
+    return cnf_restricao_colunas_rainha
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_diagonais(N):
 
@@ -198,20 +198,25 @@ def restricao_diagonais(N):
     # ¬r 12 ∨ ¬r 21
     # etc...
 
-    N = 4
     linha  = 0
     coluna = 0
     disjuncao = 0
-
+    # define a lista de cláusulas de disjunções temporaria
+    c_temp = [0 for x in range(N*N)]
     # define a lista de cláusulas de disjunções
     c = [0 for x in range(N*N)]
-
     # contador do número cláusulas
-    cont_clausulas = 0
-
-    flag_clausulas = 0
-
     r = exprvars('r', N, N)
+     # define a lista de cnfs de diagonais
+    cnf_diagonais_temp = [0 for x in range(N*N)]
+    cont_clausulas = 0
+    flag_clausulas = 0
+    cnf_diagonais = 0
+
+    # diagonais principais
+
+    cont_clausulas = 0
+    flag_clausulas = 0
 
     for linha in for_estilo_java(0, lambda linha:linha < N, lambda linha:linha+1):
         for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
@@ -221,39 +226,100 @@ def restricao_diagonais(N):
             else:
                 negacao = ~r[coluna][coluna+linha]
                 disjuncao = disjuncao | negacao
-        c[cont_clausulas] = disjuncao
-        cont_clausulas += 1
+        # se não é a primeira disjunção
+        if(cont_clausulas == 0):
+            c_temp[cont_clausulas] = disjuncao
+        else:
+            c_temp[cont_clausulas] = c_temp[cont_clausulas-1] & disjuncao
         flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
         if linha != 0:
             for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
-                #print("([", (coluna + linha), ",", coluna, "])")
-                #print("p2")
                 if flag_clausulas == 0:
                     disjuncao = ~r[coluna+linha][coluna]
                     flag_clausulas = 1
                 else:
                     negacao = ~r[coluna+linha][coluna]
                     disjuncao = disjuncao | negacao
-            c[cont_clausulas] = disjuncao
-            cont_clausulas += 1
+            if(cont_clausulas == 0):
+                c_temp[cont_clausulas] = disjuncao
+            else:
+                c_temp[cont_clausulas] = c_temp[cont_clausulas-1] & disjuncao
             flag_clausulas = 0
+            cont_clausulas = cont_clausulas + 1
 
+    # elimina 2 últimos elementos (2 casas vazias)
+    for cont in range(cont_clausulas-2):
+        c[cont] = c_temp[cont]
 
-    # gera lista conjunção de disjunções
-    # varre lista
-    for contador_cnf_restricao_diagonais_rainha in range(N):
-        if contador_cnf_restricao_diagonais_rainha == 0:
-            cnf_restricao_diagonais_rainha = c[contador_cnf_restricao_diagonais_rainha]
+    cnf_diagonais_principais = c[cont]
+    cnf_diagonais_temp[0] = cnf_diagonais_principais
+
+    # diagonais superiores secundárias
+
+    cont_clausulas = 0
+    flag_clausulas = 0
+
+    #contador diagonais superiores secundarias
+    cont_ds = 0
+
+    for cont_ds in range(0, N-1):
+        for coluna, linha in zip(reversed(range(N-cont_ds)), range(0, linha+1)):
+            if flag_clausulas == 0:
+                disjuncao = ~r[linha][coluna]
+                flag_clausulas = 1
+            else:
+                negacao = ~r[linha][coluna]
+                disjuncao = disjuncao | negacao
+        if(cont_clausulas == 0):
+            c[cont_clausulas] = disjuncao
+            #print(c[cont_clausulas])
         else:
-            cnf_restricao_diagonais_rainha = cnf_restricao_diagonais_rainha & c[contador_cnf_restricao_diagonais_rainha]
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+            #print(c[cont_clausulas])
+        flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
+
+    cnf_diagonais_secundarias_superiores = c[cont_clausulas-1]
+    cnf_diagonais_temp[1] = cnf_diagonais_secundarias_superiores
+
+    # diagonais inferiores secundárias
+
+    cont_clausulas = 0
+    flag_clausulas = 0
+    N_col = N
+    N_lin = N
+    inicio = 0
+
+    for cont_di in range(0, N-1):
+        for coluna, linha in zip(reversed(range(N_col)), range(inicio, N_lin)):
+            if flag_clausulas == 0:
+                disjuncao = ~r[linha][coluna]
+                flag_clausulas = 1
+            else:
+                negacao = ~r[linha][coluna]
+                disjuncao = disjuncao | negacao
+        inicio = inicio + 1
+        if(cont_clausulas == 0):
+            c[cont_clausulas] = disjuncao
+        else:
+            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+        flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
+
+    cnf_diagonais_secundarias_inferiores = c[cont_clausulas-1]
+
+    cnf_diagonais_temp[2] = cnf_diagonais_secundarias_inferiores
+
+    cnf_restricao_diagonais_rainha = cnf_diagonais_temp[0] & cnf_diagonais_temp[1] & cnf_diagonais_temp[2]
+
     # no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restricao diagonais
     # converte em bdd a cnf
-    bdd = expr2bdd(cnf_restricao_diagonais_rainha)
+    #bdd = expr2bdd(cnf_diagonais)
 
     #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
 
-
-    return (bdd)
+    return cnf_restricao_diagonais_rainha
 #--------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
@@ -267,11 +333,15 @@ if __name__ == "__main__":
 
     cnf_restricao_colunas = restricao_colunas(N)
 
-    cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas
+    cnf_restricao_diagonais = restricao_diagonais(N)
 
-    bdd_expr_cnf_n_rainhas = expr2bdd(cnf_n_rainhas)
-    print(bdd_expr_cnf_n_rainhas.satisfy_count())
-    print(list(bdd_expr_cnf_n_rainhas.satisfy_all()))
+    cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas & cnf_restricao_diagonais
+
+    bdd_cnf_n_rainhas = expr2bdd(cnf_n_rainhas)
+
+    # Testa satisfatibilidade
+    print(bdd_cnf_n_rainhas.satisfy_count())
+    print(bdd_cnf_n_rainhas.is_zero())
 
 
 

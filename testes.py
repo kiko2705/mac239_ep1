@@ -7,7 +7,7 @@ def for_estilo_java(valor_inicial,condicao,incremento):
         yield valor_inicial
         valor_inicial = incremento(valor_inicial)
 #------------------------------------------------------------------------------------------------------------------
-if __name__ == "__main__":
+def restricao_diagonais(N):
 
     N = 3
     linha  = 0
@@ -24,7 +24,6 @@ if __name__ == "__main__":
     cont_clausulas = 0
     flag_clausulas = 0
     cnf_diagonais = 0
-#-------------------------------------------------------------------------------------
 
     # diagonais principais
 
@@ -67,7 +66,7 @@ if __name__ == "__main__":
 
     cnf_diagonais_principais = c[cont]
     cnf_diagonais_temp[0] = cnf_diagonais_principais
-#--------------------------------------------------------------------------------------------------
+
     # diagonais superiores secundárias
 
     cont_clausulas = 0
@@ -95,7 +94,7 @@ if __name__ == "__main__":
 
     cnf_diagonais_secundarias_superiores = c[cont_clausulas-1]
     cnf_diagonais_temp[1] = cnf_diagonais_secundarias_superiores
-#-----------------------------------------------------------------------------------------
+
     # diagonais inferiores secundárias
 
     cont_clausulas = 0
@@ -125,6 +124,11 @@ if __name__ == "__main__":
     cnf_diagonais_temp[2] = cnf_diagonais_secundarias_inferiores
 
     cnf_diagonais = cnf_diagonais_temp[0] & cnf_diagonais_temp[1] & cnf_diagonais_temp[2]
-    print(cnf_diagonais)
+
+    return cnf_diagonais
 #---------------------------------------------------------------------------------------
+if __name__ == "__main__":
+
+    print(restricao_diagonais(3))
+
 
