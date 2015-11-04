@@ -34,14 +34,10 @@ def presenca_rainha(N, cnf_presenca_rainha):
         # fim disjunções da cláusula n
         c[cont_clausulas] = disjuncao
         cont_clausulas += 1
-    # no final deste laço c[] conterá o conjunto de cláusulas de disjunções
 
-    # agora juntaremos cada c[] com um & para construir a CNF
     # gera lista conjunção de disjunções
     for contador_cnf_presenca_rainha in range(N):
             cnf_presenca_rainha[contador_cnf_presenca_rainha] = c[contador_cnf_presenca_rainha]
-
-    #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
     return cnf_presenca_rainha
 #--------------------------------------------------------------------------------------------------------------------

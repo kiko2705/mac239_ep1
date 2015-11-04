@@ -27,6 +27,8 @@ if __name__ == "__main__":
 
     cnf = [0 for x in range(N*N*N)]
 
+    contador_duplas = 0
+
     # une as restrições
 
     print("presenças rainha")
@@ -79,4 +81,6 @@ if __name__ == "__main__":
     # Testa satisfatibilidade
     #print(bdd_cnf_n_rainhas.satisfy_count())
     #print(bdd_cnf_n_rainhas.is_zero())
+
+    #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
