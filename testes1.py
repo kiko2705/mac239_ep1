@@ -9,13 +9,16 @@ def for_estilo_java(valor_inicial,condicao,incremento):
 #------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
-    N = 4
+    N = 3
     linha  = 0
     coluna = 0
     disjuncao = 0
 
     # define a lista de cláusulas de disjunções
     c = [0 for x in range(N*N)]
+
+    # define a lista de cláusulas de disjunções temporaria
+    c_temp = [0 for x in range(N*N)]
 
     # contador do número cláusulas
     cont_clausulas = 0
@@ -25,6 +28,9 @@ if __name__ == "__main__":
     r = exprvars('r', N, N)
 #-------------------------------------------------------------------------------------
     # diagonais principais
+
+    cont_clausulas = 0
+    flag_clausulas = 0
 
     for linha in for_estilo_java(0, lambda linha:linha < N, lambda linha:linha+1):
         for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
@@ -36,12 +42,11 @@ if __name__ == "__main__":
                 disjuncao = disjuncao | negacao
         # se não é a primeira disjunção
         if(cont_clausulas == 0):
-            c[cont_clausulas] = disjuncao
+            c_temp[cont_clausulas] = disjuncao
         else:
-            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
-
-        cont_clausulas += 1
+            c_temp[cont_clausulas] = c_temp[cont_clausulas-1] & disjuncao
         flag_clausulas = 0
+        cont_clausulas = cont_clausulas + 1
         if linha != 0:
             for coluna in for_estilo_java(0, lambda coluna:coluna<N-linha, lambda coluna:coluna+1):
                 if flag_clausulas == 0:
@@ -50,9 +55,20 @@ if __name__ == "__main__":
                 else:
                     negacao = ~r[coluna+linha][coluna]
                     disjuncao = disjuncao | negacao
-            c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
+            if(cont_clausulas == 0):
+                c_temp[cont_clausulas] = disjuncao
+            else:
+                c_temp[cont_clausulas] = c_temp[cont_clausulas-1] & disjuncao
             flag_clausulas = 0
-            cont_clausulas += 1
+            cont_clausulas = cont_clausulas + 1
+
+    # elimina 2 últimos elementos (2 casas vazias)
+    for cont in range(cont_clausulas-2):
+        c[cont] = c_temp[cont]
+
+    cnf_diagonais_principais = c[cont]
+    print("diagonais principais")
+    print(cnf_diagonais_principais)
 #--------------------------------------------------------------------------------------------------
     # diagonais superiores secundárias
 
@@ -77,7 +93,7 @@ if __name__ == "__main__":
         flag_clausulas = 0
         cont_clausulas = cont_clausulas + 1
 
-        print(c[cont_clausulas-1])
+    #print(c[cont_clausulas-1])
 #-----------------------------------------------------------------------------------------
     # diagonais inferiores secundárias
 
@@ -103,14 +119,7 @@ if __name__ == "__main__":
             c[cont_clausulas] = c[cont_clausulas-1] & disjuncao
         flag_clausulas = 0
         cont_clausulas = cont_clausulas + 1
-#---------------------------------------------------------------------------------------
-    # gera lista conjunção de disjunções
-    # varre lista
-    for contador_cnf_restricao_diagonais_rainha in range(N):
-        if contador_cnf_restricao_diagonais_rainha == 0:
-            cnf_restricao_diagonais_rainha = c[contador_cnf_restricao_diagonais_rainha]
-        else:
-            cnf_restricao_diagonais_rainha = cnf_restricao_diagonais_rainha & c[contador_cnf_restricao_diagonais_rainha]
-    # no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restricao diagonais
 
-    #print(cnf_restricao_diagonais_rainha)
+    #print(c[cont_clausulas-1])
+#---------------------------------------------------------------------------------------
+

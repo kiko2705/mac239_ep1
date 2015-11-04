@@ -72,6 +72,9 @@ def presenca_rainha(N):
 
     #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
 
+    #print("presença rainhas")
+    #print(cnf_presenca_rainha)
+
     return cnf_presenca_rainha
 #--------------------------------------------------------------------------------------------------------------------
 def restricao_linhas(N):
@@ -129,6 +132,9 @@ def restricao_linhas(N):
     #bdd = expr2bdd(cnf_restricao_linhas_rainha)
 
     #Export2Image(bdd, "pdf", "bdd_restricao_linhas.pdf")
+
+    #print("restrição linhas")
+    #print(cnf_restricao_linhas_rainha)
 
     return cnf_restricao_linhas_rainha
 #--------------------------------------------------------------------------------------------------------------------
@@ -188,6 +194,9 @@ def restricao_colunas(N):
     #bdd = expr2bdd(cnf_restricao_colunas_rainha)
 
     #Export2Image(bdd, "pdf", "bdd_restricao_colunas.pdf")
+
+    #print("restrição colunas")
+    #print(cnf_restricao_colunas_rainha)
 
     return cnf_restricao_colunas_rainha
 #--------------------------------------------------------------------------------------------------------------------
@@ -255,6 +264,9 @@ def restricao_diagonais(N):
     cnf_diagonais_principais = c[cont]
     cnf_diagonais_temp[0] = cnf_diagonais_principais
 
+    #print("diagonais principais")
+    #print(cnf_diagonais_temp[0])
+
     # diagonais superiores secundárias
 
     cont_clausulas = 0
@@ -282,6 +294,9 @@ def restricao_diagonais(N):
 
     cnf_diagonais_secundarias_superiores = c[cont_clausulas-1]
     cnf_diagonais_temp[1] = cnf_diagonais_secundarias_superiores
+
+    #print("diagonais secundarias superiores")
+    #print(cnf_diagonais_temp[1])
 
     # diagonais inferiores secundárias
 
@@ -311,6 +326,9 @@ def restricao_diagonais(N):
 
     cnf_diagonais_temp[2] = cnf_diagonais_secundarias_inferiores
 
+    #print("diagonais secundarias inferiores")
+    #print(cnf_diagonais_temp[2])
+
     cnf_restricao_diagonais_rainha = cnf_diagonais_temp[0] & cnf_diagonais_temp[1] & cnf_diagonais_temp[2]
 
     # no final deste laço cnf_restricao_diagonais_rainha conterá a cnf de restricao diagonais
@@ -327,13 +345,18 @@ if __name__ == "__main__":
     N = int(input('Entre com o tamanho do tabuleiro : '))
 
     # une as restrições
+
     cnf_presenca_rainha = presenca_rainha(N)
+    #presenca_rainha(N)
 
     cnf_restricao_linhas = restricao_linhas(N)
+    #restricao_linhas(N)
 
     cnf_restricao_colunas = restricao_colunas(N)
+    #restricao_colunas(N)
 
     cnf_restricao_diagonais = restricao_diagonais(N)
+    #restricao_diagonais(N)
 
     cnf_n_rainhas = cnf_presenca_rainha & cnf_restricao_linhas & cnf_restricao_colunas & cnf_restricao_diagonais
 
