@@ -7,6 +7,7 @@ import presenca_rainha
 import restricao_linhas
 import restricao_diagonais
 import restricao_colunas
+
 #-------------------------------------------------------------------------------------------------------------------
 def Export2Image(bdd, fmt, file_name):
     # Exporta o diagrama para o Graphviz (linguagem Dot)
@@ -25,58 +26,44 @@ if __name__ == "__main__":
     # define a lista de cláusulas de disjunções
     c = [0 for x in range(N*N*N)]
 
+    cnf_temp = [0 for x in range(N*N*N)]
+
     cnf = [0 for x in range(N*N*N)]
 
-    contador_duplas = 0
+    temp = 0
+
+    contador_global_clausulas = 0
 
     # une as restrições
 
     print("presenças rainha")
-    cnf = presenca_rainha.presenca_rainha(N, c)
+    cnf_temp = presenca_rainha.presenca_rainha(N, c)
     #bdd_presenca_rainha = expr2bdd(cnf_presenca_rainha)
-    print(cnf[0])
-    print(cnf[1])
-    print(cnf[2])
+    for cont_presenca in range(N):
+        cnf[contador_global_clausulas] = cnf_temp[cont_presenca]
+        print(cnf[contador_global_clausulas])
+        contador_global_clausulas += 1
 
     print("restrição linhas")
-    cnf = restricao_linhas.restricao_linhas(N, c)
+    cnf_temp = restricao_linhas.restricao_linhas(N, c)
     #bdd_restricao_linhas = expr2bdd(cnf_restricao_linhas)
-    print(cnf[0])
-    print(cnf[1])
-    print(cnf[2])
-    print(cnf[3])
-    print(cnf[4])
-    print(cnf[5])
-    print(cnf[6])
-    print(cnf[7])
-    print(cnf[8])
+    for cont_restricao_linhas in range(N*N):
+        cnf[contador_global_clausulas] = cnf_temp[cont_restricao_linhas]
+        print(cnf[contador_global_clausulas])
+        contador_global_clausulas += 1
 
     print("restrição colunas")
-    cnf = restricao_colunas.restricao_colunas(N, c)
+    cnf_temp = restricao_colunas.restricao_colunas(N, c)
     #bdd_restricao_colunas = expr2bdd(cnf_restricao_colunas)
-    print(cnf[0])
-    print(cnf[1])
-    print(cnf[2])
-    print(cnf[3])
-    print(cnf[4])
-    print(cnf[5])
-    print(cnf[6])
-    print(cnf[7])
-    print(cnf[8])
+    for cont_restricao_colunas in range(N*N):
+        cnf[contador_global_clausulas] = cnf_temp[cont_restricao_colunas]
+        print(cnf[contador_global_clausulas])
+        contador_global_clausulas += 1
 
     print("restrição diagonais")
     cnf = restricao_diagonais.restricao_diagonais(N, c)
     #bdd_restricao_digonais = expr2bdd(cnf_restricao_diagonais)
-    print(cnf[0])
-    print(cnf[1])
-    print(cnf[2])
-    print(cnf[3])
-    print(cnf[4])
-    print(cnf[5])
-    print(cnf[6])
-    print(cnf[7])
-    print(cnf[8])
-    print(cnf[9])
+
 
     # Testa satisfatibilidade
     #print(bdd_cnf_n_rainhas.satisfy_count())

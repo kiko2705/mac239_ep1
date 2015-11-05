@@ -36,8 +36,8 @@ def presenca_rainha(N, cnf_presenca_rainha):
         cont_clausulas += 1
 
     # gera lista conjunção de disjunções
-    for contador_cnf_presenca_rainha in range(N):
-            cnf_presenca_rainha[contador_cnf_presenca_rainha] = c[contador_cnf_presenca_rainha]
+    for contador_duplas in range(N):
+            cnf_presenca_rainha[contador_duplas] = c[contador_duplas]
 
     return cnf_presenca_rainha
 #--------------------------------------------------------------------------------------------------------------------
