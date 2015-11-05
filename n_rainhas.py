@@ -7,6 +7,7 @@ import presenca_rainha
 import restricao_linhas
 import restricao_diagonais
 import restricao_colunas
+import cnf_to_string
 import imprime_tabuleiro
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -40,11 +41,11 @@ if __name__ == "__main__":
     # define a lista de cláusulas de disjunções
     c = [0 for x in range(N*N*N)]
 
-    cnf_temp_rainhas = [0 for x in range(N*N*N)]
+    cnf_temp_rainhas = [0 for x in range(N*N*N*N)]
 
-    cnf_rainhas = [0 for x in range(N*N*N)]
+    cnf_rainhas = [0 for x in range(N*N*N*N)]
 
-    cnf = [0 for x in range(N*N*N)]
+    cnf = [0 for x in range(N*N*N*N)]
 
     temp = 0
 
@@ -66,47 +67,69 @@ if __name__ == "__main__":
     print("restrição linhas")
     cnf_temp_rainhas = restricao_linhas.restricao_linhas(N, c)
     #bdd_restricao_linhas = expr2bdd(cnf_restricao_linhas)
-    for cont_restricao_linhas in range(N*N):
-        cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_linhas]
-        print(cnf_rainhas[contador_global_clausulas])
-        contador_global_clausulas += 1
+    for cont_restricao_linhas in range(N*N*N):
+        if cnf_temp_rainhas[cont_restricao_linhas] == 0:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_linhas]
+            contador_global_clausulas += 1
+            break
+        else:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_linhas]
+            print(cnf_rainhas[contador_global_clausulas])
+            contador_global_clausulas += 1
 
     print("restrição colunas")
-    cnf_temp = restricao_colunas.restricao_colunas(N, c)
+    cnf_temp_rainhas = restricao_colunas.restricao_colunas(N, c)
     #bdd_restricao_colunas = expr2bdd(cnf_restricao_colunas)
-    for cont_restricao_colunas in range(N*N):
-        cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_colunas]
-        print(cnf_rainhas[contador_global_clausulas])
-        contador_global_clausulas += 1
+    for cont_restricao_colunas in range(N*N*N):
+        if cnf_temp_rainhas[cont_restricao_colunas] == 0:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_colunas]
+            contador_global_clausulas += 1
+            break
+        else:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_colunas]
+            print(cnf_rainhas[contador_global_clausulas])
+            contador_global_clausulas += 1
 
-    contador_global_clausulas -= 1
-
-    # print("restrição diagonais")
-    # cnf_temp = restricao_diagonais.restricao_diagonais(N, c)
+    print("restrição diagonais")
+    cnf_temp_rainhas = restricao_diagonais.restricao_diagonais(N, c)
     # bdd_restricao_digonais = expr2bdd(cnf_restricao_diagonais)
-    # for cont_restricao_diagonais in range(N*N):
-        # cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_diagonais]
-        # print(cnf_rainhas[contador_global_clausulas])
-        # contador_global_clausulas += 1
+    for cont_restricao_diagonais in range(N*N*N):
+        if cnf_temp_rainhas[cont_restricao_diagonais] == 0:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_diagonais]
+            break
+        else:
+            cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_diagonais]
+            print(cnf_temp_rainhas[cont_restricao_diagonais])
+            contador_global_clausulas += 1
 
-    # gera a cnf com as conjunções das disjunções
-    # cnf =
+    cnf_completa = cnf_rainhas[0]
+
+    cont = 1
+
+    for cont in range(1, contador_global_clausulas):
+        cnf_completa = cnf_completa & cnf_rainhas[cont]
+
+    cnf_to_string.cnf_to_string(cnf_completa)
 
     # transforma a cnf final em bdd
-    # bdd_cnf_n_rainhas = expr2bdd(cnf)
+    bdd_cnf_n_rainhas = expr2bdd(cnf_completa)
 
     # Testa satisfatibilidade e printa tabuleiro se existe solução
 
-    # testa se é sat
-    # if bdd_cnf_n_rainhas.is_zero():
-        #print("UNSAT")
-    # else:
-    #   #print("SAT")
+    #print(bdd_cnf_n_rainhas.satisfy_one())
+
+    # testa se é satd
+    #if bdd_cnf_n_rainhas.satisfy_one():
+     #   print("UNSAT")
+    #else:
+     #   print("SAT")
     # testa uma solução
-    #   bdd_cnf_n_rainhas.satisfy_one()
+      #  print(bdd_cnf_n_rainhas.satisfy_one())
     # imprime tabuleiro
     #   for cont_rainhas in range(K)
     #       imprime_tabuleiro(N, pos_rainha_x[cont_rainhas], pos_rainha_y[cont_rainhas)
+
+
 
 
 
