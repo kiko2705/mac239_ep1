@@ -7,7 +7,9 @@ from pyeda.inter import *
 def cnf_to_string(cnf_completa):
     print("função transforma cnf em string")
 
-    print(cnf_completa)
-    cnf_completa_string = str(cnf_completa)
-    print(cnf_completa_string)
+    cnf_completa_temp = ""
+
+
+
+
 

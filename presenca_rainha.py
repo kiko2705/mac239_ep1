@@ -31,15 +31,13 @@ def presenca_rainha(N, cnf_presenca_rainha):
                 disjuncao = r[linha][coluna]
             else:
                 disjuncao = disjuncao | r[linha][coluna]
-        # fim disjunções da cláusula n
         c[cont_clausulas] = disjuncao
         cont_clausulas += 1
+
+
 
     # gera lista conjunção de disjunções
     for contador_duplas in range(N):
             cnf_presenca_rainha[contador_duplas] = c[contador_duplas]
 
     return cnf_presenca_rainha
-#--------------------------------------------------------------------------------------------------------------------
-
-

@@ -39,7 +39,7 @@ if __name__ == "__main__":
         pos_rainha_y[conta_posicoes] = int(input())
 
     # define a lista de cláusulas de disjunções
-    c = [0 for x in range(N*N*N)]
+    c = [0 for x in range(N*N*N*N)]
 
     cnf_temp_rainhas = [0 for x in range(N*N*N*N)]
 
@@ -107,9 +107,10 @@ if __name__ == "__main__":
     cont = 1
 
     for cont in range(1, contador_global_clausulas):
-        cnf_completa = cnf_completa & cnf_rainhas[cont]
-
-    cnf_to_string.cnf_to_string(cnf_completa)
+        if cnf_rainhas[cont] == 0:
+           cnf_rainhas[cont] = 1
+        else:
+            cnf_completa = cnf_completa & cnf_rainhas[cont]
 
     # transforma a cnf final em bdd
     bdd_cnf_n_rainhas = expr2bdd(cnf_completa)
@@ -119,10 +120,11 @@ if __name__ == "__main__":
     #print(bdd_cnf_n_rainhas.satisfy_one())
 
     # testa se é satd
-    #if bdd_cnf_n_rainhas.satisfy_one():
-     #   print("UNSAT")
-    #else:
-     #   print("SAT")
+    if bdd_cnf_n_rainhas.is_zero():
+        print("UNSAT")
+    else:
+        print("SAT")
+        print(bdd_cnf_n_rainhas.satisfy_count())
     # testa uma solução
       #  print(bdd_cnf_n_rainhas.satisfy_one())
     # imprime tabuleiro
