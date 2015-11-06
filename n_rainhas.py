@@ -57,16 +57,12 @@ if __name__ == "__main__":
 
     # calcula a cnf final sem rainhas
 
-    print("presenças rainha")
     cnf_temp_rainhas = presenca_rainha.presenca_rainha(N, c)
     for cont_presenca in range(N):
         cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_presenca]
-        print(cnf_rainhas[contador_global_clausulas])
         contador_global_clausulas += 1
 
-    print("restrição linhas")
     cnf_temp_rainhas = restricao_linhas.restricao_linhas(N, c)
-    #bdd_restricao_linhas = expr2bdd(cnf_restricao_linhas)
     for cont_restricao_linhas in range(N*N*N):
         if cnf_temp_rainhas[cont_restricao_linhas] == 0:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_linhas]
@@ -74,12 +70,9 @@ if __name__ == "__main__":
             break
         else:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_linhas]
-            print(cnf_rainhas[contador_global_clausulas])
             contador_global_clausulas += 1
 
-    print("restrição colunas")
     cnf_temp_rainhas = restricao_colunas.restricao_colunas(N, c)
-    #bdd_restricao_colunas = expr2bdd(cnf_restricao_colunas)
     for cont_restricao_colunas in range(N*N*N):
         if cnf_temp_rainhas[cont_restricao_colunas] == 0:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_colunas]
@@ -87,19 +80,15 @@ if __name__ == "__main__":
             break
         else:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_colunas]
-            print(cnf_rainhas[contador_global_clausulas])
             contador_global_clausulas += 1
 
-    print("restrição diagonais")
     cnf_temp_rainhas = restricao_diagonais.restricao_diagonais(N, c)
-    # bdd_restricao_digonais = expr2bdd(cnf_restricao_diagonais)
     for cont_restricao_diagonais in range(N*N*N):
         if cnf_temp_rainhas[cont_restricao_diagonais] == 0:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_diagonais]
             break
         else:
             cnf_rainhas[contador_global_clausulas] = cnf_temp_rainhas[cont_restricao_diagonais]
-            print(cnf_temp_rainhas[cont_restricao_diagonais])
             contador_global_clausulas += 1
 
     cnf_completa = cnf_rainhas[0]
@@ -117,8 +106,6 @@ if __name__ == "__main__":
 
     # Testa satisfatibilidade e printa tabuleiro se existe solução
 
-    #print(bdd_cnf_n_rainhas.satisfy_one())
-
     # testa se é satd
     if bdd_cnf_n_rainhas.is_zero():
         print("UNSAT")
@@ -130,10 +117,6 @@ if __name__ == "__main__":
     # imprime tabuleiro
     #   for cont_rainhas in range(K)
     #       imprime_tabuleiro(N, pos_rainha_x[cont_rainhas], pos_rainha_y[cont_rainhas)
-
-
-
-
 
     # exemplo de como imprimir grafo
     #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
