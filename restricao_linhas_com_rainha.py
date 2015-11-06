@@ -26,30 +26,32 @@ def cnf_restricao_linhas_com_rainhas(N, K, c, pos_rainha_x):
     # define a lista de duplas de disjunções
     c_temp = [0 for x in range(N*N*N)]
 
-    contador_c = 0
-
     contador_dupla = 0
+
+    cont = 0
 
     cont_clausulas = 0
 
+    cont_global = 0
+
+    print ("Restrição linha")
     # loop para preencher cláusulas restrição linhas rainha
     for linha in range(N):
-            for cont in range(K):
-                # repete o numero de rainhas estes dois loops
-                if linha == pos_rainha_x[cont]:
-                    c[contador_c] = True
+        for cont in range(K):
+            # repete o numero de rainhas estes dois loops
+            if linha == pos_rainha_x[cont]:
+                c[cont_global] = True
+                cont_global += 1
+                linha += 1
+        if (linha < N):
+            if (c[cont_global] != True):
                 for coluna in range(N-1):
                     for aux in range(coluna+1, N):
                         disjuncao_temp = ~r[linha][coluna] | ~r[linha][aux]
                         c_temp[contador_dupla] = disjuncao_temp
-                        c[contador_c] = c_temp[contador_dupla]
-                        contador_c += 1
+                        c[cont_global] = c_temp[contador_dupla]
                         contador_dupla += 1
-
-    for cont in range(3):
-        print("")
-        print(c[cont])
-
+                        cont_global += 1
 
     return c
 #--------------------------------------------------------------------------------------------------------------------

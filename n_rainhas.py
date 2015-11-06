@@ -9,6 +9,8 @@ import restricao_diagonais
 import restricao_colunas
 import presenca_rainha_com_rainhas
 import restricao_linhas_com_rainha
+import restricao_colunas_com_rainhas
+import restricao_diagonais_com_rainhas
 
 #-------------------------------------------------------------------------------------------------------------------
 def Export2Image(bdd, fmt, file_name):
@@ -41,7 +43,7 @@ if __name__ == "__main__":
 
 
     # define a lista de cláusulas de disjunções
-    c = [0 for x in range(N*N*N*N)]
+    c = [0 for x in range(N*N*N)]
 
     cnf_temp_rainhas = [0 for x in range(N*N*N*N)]
 
@@ -128,15 +130,37 @@ if __name__ == "__main__":
         # calcula cnf de presença com rainhas
         cnf_temp_com_rainhas = presenca_rainha_com_rainhas.cnf_presenca_com_rainhas(N, K, c, pos_rainha_x)
 
+
+
         for cont_presenca in range(N):
             cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_presenca]
             #print(cnf_com_rainhas[contador_global_clausulas])
-            contador_global_clausulas += 1
 
         # calcula cnf de restrição de linhas com rainhas
 
         cnf_temp_com_rainhas = restricao_linhas_com_rainha.cnf_restricao_linhas_com_rainhas(N, K, c, pos_rainha_x)
 
+        for cont_restricao_linhas in range(N):
+            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_linhas]
+            #print(cnf_com_rainhas[contador_global_clausulas])
+
+        # calcula cnf de restrição de colunas com rainhas
+
+        cnf_temp_com_rainhas = restricao_colunas_com_rainhas.cnf_restricao_colunas_com_rainhas(N, K, c, pos_rainha_y)
+
+        for cont_restricao_colunas in range(N):
+            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_colunas]
+            #print(cnf_com_rainhas[contador_global_clausulas])
+
+        # calcula cnf de restrição de diagonais com rainhas
+
+        cnf_temp_com_rainhas = restricao_diagonais_com_rainhas.cnf_restricao_diagonais_com_rainhas(N, K, c, pos_rainha_x, pos_rainha_y)
+
+        for cont_restricao_diagonais in range(N):
+            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_diagonais]
+            #print(cnf_com_rainhas[contador_global_clausulas])
+
+        # juntar as quatro clausulas com rainhas
 
 
 
