@@ -1,4 +1,4 @@
-__author__ = 'Francisco Santos Nusp 794650,  Vitor Kemada Nusp'
+__author__ = 'Francisco Santos Nusp 794650,  Vítor Kei Taira Tamada 8516250'
 
 from pyeda.inter import *
 from subprocess import call
@@ -11,19 +11,13 @@ import presenca_rainha_com_rainhas
 import restricao_linhas_com_rainha
 import restricao_colunas_com_rainhas
 import restricao_diagonais_com_rainhas
-
-#-------------------------------------------------------------------------------------------------------------------
-def Export2Image(bdd, fmt, file_name):
-    # Exporta o diagrama para o Graphviz (linguagem Dot)
-    with open("temp.gv", "w") as hFile:
-        hFile.write(bdd.to_dot())
-    # Gera o PDF com o diagrama
-    call(["dot", "-T" + fmt, "temp.gv", "-o" + file_name])
-    os.remove("temp.gv")
+import testa_sat
 #--------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
     # INSERE DADOS INICIAIS ( N = TAMANHO TABULEIRO , K = NÚMERO DE RAINHAS )
+    print("Este programa não funciona como esperado se 2 ou mais Rainhas estiverem nas mesmas linhas, colunas ou diagonais")
+    print("Então por favor não provoque tal situação na entrada das coordenadas das Rainhas")
     N = int(input('Entre com o tamanho do tabuleiro : '))
     K = int(input('Entre com o número de rainhas : '))
 
@@ -41,20 +35,12 @@ if __name__ == "__main__":
         print("Posição Y da rainha ", conta_posicoes)
         pos_rainha_y[conta_posicoes] = int(input())
 
-
-    # define a lista de cláusulas de disjunções
     c = [0 for x in range(N*N*N)]
-
     cnf_temp_rainhas = [0 for x in range(N*N*N*N)]
-
     cnf_temp_com_rainhas = [0 for x in range(N*N*N*N)]
-
     cnf_rainhas = [0 for x in range(N*N*N*N)]
-
     cnf_com_rainhas = [0 for x in range(N*N*N*N)]
-
     cnf = [0 for x in range(N*N*N*N)]
-
     temp = 0
 
     contador_global_clausulas = 0
@@ -110,57 +96,30 @@ if __name__ == "__main__":
 
         # Testa satisfatibilidade e printa tabuleiro se existe solução
 
-        # testa se é satd
-        if bdd_cnf_n_rainhas.is_zero():
-            print("UNSAT")
-        else:
-            print("SAT")
-            print(bdd_cnf_n_rainhas.satisfy_count())
-        # testa uma solução
-        #  print(bdd_cnf_n_rainhas.satisfy_one())
-        # imprime tabuleiro
-        #   for cont_rainhas in range(K)
-        #       imprime_tabuleiro(N, pos_rainha_x[cont_rainhas], pos_rainha_y[cont_rainhas)
-
-        # exemplo de como imprimir grafo
-        #Export2Image(bdd, "pdf", "bdd_presenca.pdf")
+        # testa se é sat
+        testa_sat.testa_sat(bdd_cnf_n_rainhas)
 
     # aqui começa a calcular a cnf final com rainhas
-    else:
+    elif (K > 0):
         # calcula cnf de presença com rainhas
         cnf_temp_com_rainhas = presenca_rainha_com_rainhas.cnf_presenca_com_rainhas(N, K, c, pos_rainha_x)
-
-
-
-        for cont_presenca in range(N):
-            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_presenca]
-            #print(cnf_com_rainhas[contador_global_clausulas])
 
         # calcula cnf de restrição de linhas com rainhas
 
         cnf_temp_com_rainhas = restricao_linhas_com_rainha.cnf_restricao_linhas_com_rainhas(N, K, c, pos_rainha_x)
 
-        for cont_restricao_linhas in range(N):
-            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_linhas]
-            #print(cnf_com_rainhas[contador_global_clausulas])
-
         # calcula cnf de restrição de colunas com rainhas
 
         cnf_temp_com_rainhas = restricao_colunas_com_rainhas.cnf_restricao_colunas_com_rainhas(N, K, c, pos_rainha_y)
-
-        for cont_restricao_colunas in range(N):
-            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_colunas]
-            #print(cnf_com_rainhas[contador_global_clausulas])
 
         # calcula cnf de restrição de diagonais com rainhas
 
         cnf_temp_com_rainhas = restricao_diagonais_com_rainhas.cnf_restricao_diagonais_com_rainhas(N, K, c, pos_rainha_x, pos_rainha_y)
 
-        for cont_restricao_diagonais in range(N):
-            cnf_com_rainhas[contador_global_clausulas] = cnf_temp_com_rainhas[cont_restricao_diagonais]
-            #print(cnf_com_rainhas[contador_global_clausulas])
-
         # juntar as quatro clausulas com rainhas
+
+    else:
+        print ("Valor de K inválido")
 
 
 

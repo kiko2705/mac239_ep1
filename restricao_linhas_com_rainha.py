@@ -34,7 +34,6 @@ def cnf_restricao_linhas_com_rainhas(N, K, c, pos_rainha_x):
 
     cont_global = 0
 
-    print ("Restrição linha")
     # loop para preencher cláusulas restrição linhas rainha
     for linha in range(N):
         for cont in range(K):

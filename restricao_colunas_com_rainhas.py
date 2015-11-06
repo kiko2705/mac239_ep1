@@ -52,9 +52,6 @@ def cnf_restricao_colunas_com_rainhas(N, K, c, pos_rainha_y):
                         contador_dupla += 1
                         cont_global += 1
 
-    for cont in range (0, cont_global):
-        print (c[cont])
-
     return c
 #--------------------------------------------------------------------------------------------------------------------
 
